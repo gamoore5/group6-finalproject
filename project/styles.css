@@ -1,0 +1,80 @@
+    /* Centered header top of page */
+    h1 {
+        text-align: center
+    }
+
+    /* Fixed text box at the bottom of screen */
+    .text-box {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 10%;
+        border-radius: 15px;
+        border: 2px solid black;
+        box-sizing: border-box;
+    }
+
+    /* Scrollable container for message history */
+    .messaging {
+        overflow-y: auto;
+        padding-bottom: 15%;
+    }
+
+    /* Orange messages on the left side */
+    .chatbot-message {
+        max-width: 50%;
+        display: inline-block;
+        margin-top: 10px;
+        border-radius: 50px;
+        padding: 10px;
+        border: 2px solid black;
+        background-color: #E64100;
+    }
+
+    /* Navy blue messages on the right side */
+    .human-message {
+        max-width: 50%;
+        display: inline-block;
+        margin-left: auto;
+        margin-top: 10px;
+        border-radius: 50px;
+        padding: 10px;
+        border: 2px solid black;
+        background-color: #0B162A;
+        color: white;
+    }
+
+    /* Makes loading bubbles slightly larger */
+    .text-bubble {
+        font-size: x-large;
+    }
+
+    /* Animates loading bubbles until element destroyed, 1.8 second animation cycles */
+    .text-bubble span {
+        animation: typing 1.8s infinite;
+    }
+
+    /* Delayed second and third bubble animation */
+    .text-bubble span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .text-bubble span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    /* Rules for loading bubble animation */
+    @keyframes typing {
+        0% {
+            opacity: 0.25;
+        }
+
+        50% {
+            opacity: 1
+        }
+
+        100% {
+            opacity: 0.25
+        }
+    }

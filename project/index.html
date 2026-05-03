@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Link to css sheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Top of screen title and logo -->
+    <h1>Chicago Bears Informational Chatbot</h1>
+    <p style="text-align: center;">Accurate up to the end of the 2025 season.</p>
+    <div style="text-align: center;">
+        <img src="logo.png" width="100" height="100">
+    </div>
+    <hr>
+    <!-- Hardcoded initial message from the chatbot, scrollable screen -->
+    <div id="scroll" class="messaging">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="bear.png" width="25" height="25">
+            <div class="chatbot-message">
+                <p>I'm a Chicago football fan! Ask me anything about the Bears.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Non-scrollable text box stickied to bottom of screen -->
+    <input id="user_input" type="text" class="text-box" placeholder="Type here..." onkeydown="text_box(event)">
+
+    <script>
+        //Create a message on the right side in navy blue with human avatar uing text input
+        function human_message(text) {
+            const scroll = document.getElementById("scroll");
+
+            const outer_div = document.createElement("div");
+            outer_div.style.display = "flex";
+            outer_div.style.alignItems = "center";
+            outer_div.style.gap = "10px";
+
+            const message = document.createElement("div");
+            message.className = "human-message";
+            message.innerText = text;
+
+            const human_avatar = document.createElement("img");
+            human_avatar.width = 25;
+            human_avatar.height = 25;
+            human_avatar.src = "human.png";
+
+            outer_div.appendChild(message);
+            outer_div.appendChild(human_avatar);
+            scroll.appendChild(outer_div);
+        }
+        //Create a message on the left side in orange with bear avatar using text input
+        function chatbot_message(text) {
+            const scroll = document.getElementById("scroll");
+
+            const outer_div = document.createElement("div");
+            outer_div.style.display = "flex";
+            outer_div.style.alignItems = "center";
+            outer_div.style.gap = "10px";
+
+            const bear_avatar = document.createElement("img");
+            bear_avatar.width = 25;
+            bear_avatar.height = 25;
+            bear_avatar.src = "bear.png";
+
+            const message = document.createElement("div");
+            message.className = "chatbot-message";
+            message.innerText = text;
+
+            outer_div.appendChild(bear_avatar);
+            outer_div.appendChild(message);
+            scroll.appendChild(outer_div);
+
+            //Scroll to bottom of the screen automatically when new messages appear
+            window.scrollTo({ top: scroll.scrollHeight, behavior: "smooth" });
+
+            //Returned for use in loading bubbles
+            return outer_div;
+        }
+        //Create a loading bubble that appears before the actual message
+        function text_bubble() {
+            //Get a container with the same appearance as the chatbot's messages
+            const bubble_wrap = chatbot_message("");
+
+            //Find and replace the chatbot-message sub-element with loading bubbles
+            const bubble = bubble_wrap.querySelector(".chatbot-message")
+            const bubble_text = document.createElement("div");
+            bubble_text.className = "text-bubble";
+            bubble_text.innerHTML = "<span>.</span><span>.</span><span>.</span>";
+
+            //Inserts the new element inside the larger div element retrieved
+            bubble.appendChild(bubble_text)
+            return bubble_wrap
+        }
+        //Get the chatbot's backend response to a given string
+        async function send_to_backend(message) {
+            const get_response = await fetch("http://localhost:5000/bears_chatbot", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: message }) });
+            return await get_response.json()
+        }
+        //Tells the progeam what to do with text in the text box when enter is pressed
+        async function text_box(event) {
+            if (event.key == "Enter") {
+                const user_input = document.getElementById("user_input");
+                if (!user_input) {
+                    return;
+                }
+                else {
+                    //Element scroll retrieved to put all messages in scrollable container
+                    const scroll = document.getElementById("scroll");
+                    input_val = user_input.value;
+                    user_input.value = "";
+                    //Creates a human message element using text box input
+                    human_message(input_val);
+                    //Creates a temporary loading bubble, deleted when chatbot response retrieved
+                    const loading = text_bubble();
+                    const response = await send_to_backend(input_val);
+                    loading.remove()
+                    //Creates a chatbot message element using text from a backend call
+                    chatbot_message(response.response);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

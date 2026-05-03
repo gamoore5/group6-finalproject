@@ -20,7 +20,7 @@ Functional AI chatbot that answers questions about the Chicago Bears from an exi
 2. Install dependencies (pip3 may be required on some devices):
     * `pip install sympy=1.11.1`
     * `pip install Flask`
-    * `pip install CORS`
+    * `pip install flask-cors`
 3. Navigate to the project folder.
 4. Run the chatbot: `python3 -i app.py`
 5. Right click `index.html` and open in browser of choice.

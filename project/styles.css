@@ -1,80 +1,191 @@
-    /* Centered header top of page */
-    h1 {
-        text-align: center
+:root {
+    --bot-color: #E64100;
+    --user-color: navy;
+    --bg-color: #f4f4f9;
+    --chat-bg: #ffffff;
+    --font-family: 'Inter', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header */
+header {
+    background-color: var(--chat-bg);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #333;
+    padding-top: 22px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* Animation for header */
+header.collapsed {
+    padding: 5px 20px;
+}
+
+/* Shrink the main title slightly */
+header.collapsed .header-title,
+header.collapsed .header-subtitle {
+    font-size: 0;
+    opacity: 0;
+    margin: 0;
+    height: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, font-size 0.2s ease, height 0.2s ease, margin 0.2s ease, visibility 0.2s ease;
+}
+
+/* Completely hide the subtitle */
+header.collapsed .header-subtitle {
+    font-size: 0;
+    opacity: 0;
+    margin: 0;
+    height: 0;
+    transition: opacity 0.2s ease;
+}
+
+.disclaimer {
+    font-size: 0.85rem;
+    font-weight: normal;
+    color: #666;
+    margin-top: 8px;
+    margin-bottom: -8px;
+}
+
+.logo {
+    margin-top: 14px;
+    height: 100px;
+    width: 100px;
+}
+
+/* Chat Container */
+.chat-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Chat Bubbles */
+.message {
+    max-width: 75%;
+    padding: 12px 18px;
+    border-radius: 20px;
+    line-height: 1.5;
+    font-size: 1rem;
+    animation: fadeIn 0.3s ease-in-out;
+    word-wrap: break-word;
+}
+
+.bot-message {
+    background-color: var(--bot-color);
+    color: white;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.user-message {
+    background-color: var(--user-color);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+/* Input Area */
+.input-area {
+    background-color: var(--chat-bg);
+    padding: 18px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 10px;
+    max-width: 800px;
+    width: 100%;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 15px 20px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: var(--bot-color);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.submit-btn {
+    background-color: var(--user-color);
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: #000050;
+}
+
+.surprise-btn {
+    background-color: var(--bot-color);
+    color: white;
+}
+
+.surprise-btn:hover {
+    background-color: #cc3900;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
 
-    /* Fixed text box at the bottom of screen */
-    .text-box {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 10%;
-        border-radius: 15px;
-        border: 2px solid black;
-        box-sizing: border-box;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-
-    /* Scrollable container for message history */
-    .messaging {
-        overflow-y: auto;
-        padding-bottom: 15%;
-    }
-
-    /* Orange messages on the left side */
-    .chatbot-message {
-        max-width: 50%;
-        display: inline-block;
-        margin-top: 10px;
-        border-radius: 50px;
-        padding: 10px;
-        border: 2px solid black;
-        background-color: #E64100;
-    }
-
-    /* Navy blue messages on the right side */
-    .human-message {
-        max-width: 50%;
-        display: inline-block;
-        margin-left: auto;
-        margin-top: 10px;
-        border-radius: 50px;
-        padding: 10px;
-        border: 2px solid black;
-        background-color: #0B162A;
-        color: white;
-    }
-
-    /* Makes loading bubbles slightly larger */
-    .text-bubble {
-        font-size: x-large;
-    }
-
-    /* Animates loading bubbles until element destroyed, 1.8 second animation cycles */
-    .text-bubble span {
-        animation: typing 1.8s infinite;
-    }
-
-    /* Delayed second and third bubble animation */
-    .text-bubble span:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-
-    .text-bubble span:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-
-    /* Rules for loading bubble animation */
-    @keyframes typing {
-        0% {
-            opacity: 0.25;
-        }
-
-        50% {
-            opacity: 1
-        }
-
-        100% {
-            opacity: 0.25
-        }
-    }
+}

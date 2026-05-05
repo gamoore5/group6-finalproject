@@ -1,43 +1,56 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <!-- Link to css sheet -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <title>Simple Chatbot Interface</title>
+    <!-- NFL Theme song -->
+    <audio id="bg-music">
+        <source src="nfl_theme.mp3" type="audio/mpeg">
+    </audio>
 </head>
-
 <body>
-    <!-- Top of screen title and logo -->
-    <h1>Chicago Bears Informational Chatbot</h1>
-    <p style="text-align: center;">Accurate up to the end of the 2025 season.</p>
-    <div style="text-align: center;">
-        <img src="logo.png" width="100" height="100">
-    </div>
-    <hr>
-    <!-- Hardcoded initial message from the chatbot, scrollable screen -->
-    <div id="scroll" class="messaging">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="bear.png" width="25" height="25">
-            <div class="chatbot-message">
-                <p>I'm a Chicago football fan! Ask me anything about the Bears.</p>
-            </div>
+
+    <header>
+        <div class="header-title">Chicago Bears Informational Chatbot <br></div>
+        <img src="logo.png" class="logo">
+        <i><p class="disclaimer header-subtitle">Accurate up to the end of the 2025 season.</p></i>
+    </header>
+
+    <div class="chat-container" id="chat-container">
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="bear.png" height="24px" width="24px" style="flex-shrink: 0;">
+        <div class="message bot-message">
+            I'm a Chicago football fan! Ask me anything about the Bears.
         </div>
     </div>
-    <!-- Non-scrollable text box stickied to bottom of screen -->
-    <input id="user_input" type="text" class="text-box" placeholder="Type here..." onkeydown="text_box(event)">
+</div>
+
+    <div class="input-area">
+        <div class="input-wrapper">
+            <input type="text" id="user-input" placeholder="Ask me anything about the Chicago Bears ...." autocomplete="off" >
+            <button class="submit-btn" id="submit-btn">Send</button>
+            <button class="surprise-btn" id="surprise-btn">Fun Fact</button>
+        </div>
+    </div>
 
     <script>
-        //Create a message on the right side in navy blue with human avatar uing text input
+        // Create a message on the right side in navy blue with human avatar using text input
         function human_message(text) {
-            const scroll = document.getElementById("scroll");
+            // Targets the chat window from the first HTML version
+            const scroll = document.getElementById("chat-container");
 
             const outer_div = document.createElement("div");
             outer_div.style.display = "flex";
             outer_div.style.alignItems = "center";
+            outer_div.style.justifyContent = "flex-end"; // Pushes human message to the right
             outer_div.style.gap = "10px";
 
             const message = document.createElement("div");
-            message.className = "human-message";
+            // Uses the CSS classes from the first HTML version
+            message.className = "message user-message"; 
             message.innerText = text;
 
             const human_avatar = document.createElement("img");
@@ -49,9 +62,11 @@
             outer_div.appendChild(human_avatar);
             scroll.appendChild(outer_div);
         }
-        //Create a message on the left side in orange with bear avatar using text input
+
+        // Create a message on the left side in orange with bear avatar using text input
         function chatbot_message(text) {
-            const scroll = document.getElementById("scroll");
+            // Targets the chat window from the first HTML version
+            const scroll = document.getElementById("chat-container");
 
             const outer_div = document.createElement("div");
             outer_div.style.display = "flex";
@@ -64,63 +79,153 @@
             bear_avatar.src = "bear.png";
 
             const message = document.createElement("div");
-            message.className = "chatbot-message";
+            // Uses the CSS classes from the first HTML version
+            message.className = "message bot-message"; 
             message.innerText = text;
 
             outer_div.appendChild(bear_avatar);
             outer_div.appendChild(message);
             scroll.appendChild(outer_div);
 
-            //Scroll to bottom of the screen automatically when new messages appear
-            window.scrollTo({ top: scroll.scrollHeight, behavior: "smooth" });
+            // Scroll to bottom of the container (not the window) automatically
+            scroll.scrollTop = scroll.scrollHeight;
 
-            //Returned for use in loading bubbles
+            // Returned for use in loading bubbles
             return outer_div;
         }
-        //Create a loading bubble that appears before the actual message
+
+        // Create a loading bubble that appears before the actual message
         function text_bubble() {
-            //Get a container with the same appearance as the chatbot's messages
+            // Get a container with the same appearance as the chatbot's messages
             const bubble_wrap = chatbot_message("");
 
-            //Find and replace the chatbot-message sub-element with loading bubbles
-            const bubble = bubble_wrap.querySelector(".chatbot-message")
+            // Find and replace the sub-element with loading bubbles (updated class name)
+            const bubble = bubble_wrap.querySelector(".bot-message");
             const bubble_text = document.createElement("div");
             bubble_text.className = "text-bubble";
             bubble_text.innerHTML = "<span>.</span><span>.</span><span>.</span>";
 
-            //Inserts the new element inside the larger div element retrieved
-            bubble.appendChild(bubble_text)
-            return bubble_wrap
+            // Inserts the new element inside the larger div element retrieved
+            bubble.appendChild(bubble_text);
+            return bubble_wrap;
         }
-        //Get the chatbot's backend response to a given string
+
+        // Get the chatbot's backend response to a given string
         async function send_to_backend(message) {
-            const get_response = await fetch("http://localhost:5000/bears_chatbot", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: message }) });
-            return await get_response.json()
+            const get_response = await fetch("http://localhost:5000/bears_chatbot", { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify({ message: message }) 
+            });
+            return await get_response.json();
         }
-        //Tells the progeam what to do with text in the text box when enter is pressed
-        async function text_box(event) {
-            if (event.key == "Enter") {
-                const user_input = document.getElementById("user_input");
-                if (!user_input) {
-                    return;
-                }
-                else {
-                    //Element scroll retrieved to put all messages in scrollable container
-                    const scroll = document.getElementById("scroll");
-                    input_val = user_input.value;
-                    user_input.value = "";
-                    //Creates a human message element using text box input
-                    human_message(input_val);
-                    //Creates a temporary loading bubble, deleted when chatbot response retrieved
-                    const loading = text_bubble();
-                    const response = await send_to_backend(input_val);
-                    loading.remove()
-                    //Creates a chatbot message element using text from a backend call
-                    chatbot_message(response.response);
-                }
+
+        // Shared logic for processing text (used by both Enter key and Submit button)
+        async function process_input() {
+            const user_input = document.getElementById("user-input");
+            if (!user_input || user_input.value.trim() === "") {
+                return;
+            }
+
+            const input_val = user_input.value;
+            user_input.value = "";
+            
+            // Creates a human message element using text box input
+            human_message(input_val);
+            
+            // Creates a temporary loading bubble, deleted when chatbot response retrieved
+            const loading = text_bubble();
+            const scroll = document.getElementById("chat-container");
+    
+            try {
+                const response = await send_to_backend(input_val);
+                const messageDiv = loading.querySelector(".bot-message"); // loading bubble
+                
+                messageDiv.innerHTML = ""; 
+                messageDiv.innerText = response.response; // replaces the dots with text when response is retrieved
+                scroll.scrollTop = scroll.scrollHeight;
+
+            } catch (error) {
+                const messageDiv = loading.querySelector(".bot-message");
+                messageDiv.innerHTML = "";
+                messageDiv.innerText = "Error connecting to the backend.";
+                scroll.scrollTop = scroll.scrollHeight;
             }
         }
+
+        // Tells the program what to do with text in the text box when enter is pressed
+        function text_box(event) {
+            if (event.key == "Enter") {
+                process_input();
+            }
+        }
+
+        // Attach event listeners to the HTML elements
+        document.getElementById("user-input").addEventListener("keypress", text_box);
+        document.getElementById("submit-btn").addEventListener("click", process_input);
+
+        // NFL Theme song activation logic
+        // Grab the audio element
+        const bgMusic = document.getElementById("bg-music");
+
+        // Create a function that plays the music
+        function startMusic() {
+            // Only try to play if it's currently paused
+            if (bgMusic.paused) {
+                bgMusic.play().catch(error => {
+                    console.log("Browser blocked autoplay until user interacts.");
+                });
+            }
+            // Remove the event listener after the first click so it doesn't keep trying
+            document.body.removeEventListener("click", startMusic);
+        }
+
+        // Start music on click
+        document.body.addEventListener("click", startMusic);
+
+        // Animation logic for header collapse
+        const header = document.querySelector("header");
+        const chatWindow = document.getElementById("chat-container"); 
+        let isCollapsed = false; // to prevent glitches with scrollbar
+
+        const headerShrinkSize = 75; // The approximate number of pixels the header loses when it shrinks
+
+        chatWindow.addEventListener("scroll", () => {
+            const maxScroll = chatWindow.scrollHeight - chatWindow.clientHeight; // Calculate max distance the user can scroll
+
+            if (maxScroll < headerShrinkSize + 20) {
+                return; 
+            }
+
+            // Collapse only if user scrolls past the height of header
+            if (!isCollapsed && chatWindow.scrollTop > headerShrinkSize) {
+                header.classList.add("collapsed");
+                isCollapsed = true;
+            } 
+            // expand if user scrolls all the way back to the top
+            else if (isCollapsed && chatWindow.scrollTop < 10) {
+                header.classList.remove("collapsed");
+                isCollapsed = false;
+            }
+        });
+
+        // Surprise Me button functionality
+        const bearsFacts = [
+            "The Chicago Bears were originally founded in Decatur, Illinois, in 1920 as the Decatur Staleys.",
+            "The Bears have won nine NFL Championships. Bear down.",
+            "This franchise has more members in the Football Hall of Fame than any other team in the NFL.",
+            "George Halas, the team's founder, was known as 'Papa Bear'.",
+            "The Bears' rivalry with the Green Bay Packers is the oldest in NFL history, going all the way back to 1921. FTP."
+        ];
+
+        // Function to handle the surprise button click
+        function triggerSurprise() {
+            const randomIndex = Math.floor(Math.random() * bearsFacts.length);
+            const fact = bearsFacts[randomIndex];
+            chatbot_message("Here's a fun fact: " + fact);
+        }
+
+        document.getElementById("surprise-btn").addEventListener("click", triggerSurprise);
     </script>
 </body>
-
 </html>

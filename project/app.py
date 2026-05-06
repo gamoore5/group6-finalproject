@@ -41,30 +41,40 @@ knowledge_base = [
 
     "The Bears' rival team is the Green Bay Packers.",
 
-    "In the 2025 regular season the Chicago Bears won six games after trailing in the final two minutes, the most in NFL history.",
-    "The Bears overcame a double-digit deficit in the final two minutes of a game twice against the Green Bay Packers.",
     "In the 2025 postseason, the Chicago Bears won their Wild Card game against the Green Bay Packers.",
     "In the 2025 postseason, the Chicago Bears lost the NFC Divisional Round to the Rams.",
 
     "The Bears' quarterback is Caleb Williams.",
     "Who is the quarterback of the Chicago Bears? Caleb Williams is the starting quarterback.",
     "The Chicago Bears quarterback is Caleb Williams.",
+    "Caleb Williams threw for 3,924 yards in 2025.",
 
     "The Bears' running back is D’Andre Swift.",
-    "The Bears' tight end is Colsten Loveland.",
+    "D'Andre Swift had 1,087 rushing yards in 2025.",
+    "The Bears' tight end is Colston Loveland.",
     "The Bears' wide receivers are DJ Moore, Rome Odunze, and Luther Burden III.",
 
     "DJ Moore is a wide receiver for the Chicago Bears.",
-    "Luther Burden III is a rookie wide receiver for the Chicago Bears with strong 2025 production.",
-    "Cole Kmet is a tight end for the Chicago Bears and contributed key postseason plays.",
-    "Kyle Monangai is a rookie running back for the Chicago Bears.",
+    "Luther Burden III is a rookie wide receiver for the Chicago Bears.",
+    "Rome Odunze is a wide receiver for the Chicago Bears.",
+    "Cole Kmet is a backup tight end for the Chicago Bears.",
+    "Kyle Monangai is a rookie backup running back for the Chicago Bears.",
+    "Cairo Santos is the kicker for the Chicago Bears",
+    "Tory Taylor is the punter for the Chicago Bears",
 
     "The Chicago Bears offense includes Caleb Williams, D’Andre Swift, DJ Moore, Rome Odunze, and Luther Burden III.",
     "The Chicago Bears defense includes Montez Sweat, Tremaine Edmunds, T.J. Edwards, and Kevin Byard III.",
 
     "The Bears' offensive line includes Braxton Jones, Joe Thuney, Drew Dalman, Jonah Jackson, and Darnell Wright.",
+    "Braxton Jones is an offensive tackle for the Chicago Bears.",
+    "Joe Thuney is an offensive guard for the Chicago Bears.",
+    "Drew Dalman is a center for the Chicago Bears.",
+    "Jonah Jackson is an offensive guard for the Chicago Bears.",
+    "Darnell Wright is an offensive tackle for the Chicago Bears.",
     "The Bears' linebackers are Tremaine Edmunds, T.J. Edwards, and Noah Sewell.",
     "T.J. Edwards is a linebacker for the Chicago Bears.",
+    "Tremaine Edmunds is a linebacker for the Chicago Bears",
+    "Noah Sewell is a linebacker for the Chicago Bears.",
 
     "The Chicago Bears' head coach is Ben Johnson.",
     "Who is the Bears head coach? Ben Johnson is the head coach of the Chicago Bears.",
@@ -75,25 +85,28 @@ knowledge_base = [
     "The Bears' special teams coordinator is Richard Hightower.",
 
     "The Bears' safeties include Kevin Byard III and Jaquan Brisker.",
-    "Kevin Byard III is a safety for the Chicago Bears and recorded multiple interceptions in the 2025 season.",
-    "Montez Sweat is a defensive end for the Chicago Bears known for pass rushing.",
+    "Kevin Byard III is a safety for the Chicago Bears.",
+    "Jaquan Brisker is a safety for the Chicago Bears.",
+    "Montez Sweat is a defensive end for the Chicago Bears.",
+    "Dayo Odeyingbo is a defensive end for the Chicago Bears.",
+    "Grady Jarrett is a defensive tackle for the Chicago Bears.",
+    "Gervon Dexter Sr. is a defensive tackle for the Chicago Bears.",
     "The Bears' defensive line includes Montez Sweat, Grady Jarrett, Gervon Dexter Sr., and Dayo Odeyingbo.",
 
-    "The Chicago Bears have won nine total championships.",
+    "The Chicago Bears have won nine league championships.",
     "The Bears have appeared in two Super Bowls: 1986 and 2007.",
     "The Bears won a Super Bowl against the Patriots in 1986.",
     "The Bears lost a Super Bowl to the Colts in 2007.",
 
-    "The Chicago Bears were founded in 1919 as a company team originally called the Decatur Staleys.",
-    "The Chicago Bears are one of the oldest teams in the NFL.",
+    "The Chicago Bears were originally called the Decatur Staleys.",
+    "The Bears were founded in 1919.",
 
     "Walter Payton was a legendary running back for the Chicago Bears.",
     "Walter Payton ranks second in all-time career rushing yards with 16,726.",
     "George Halas founded and owned the Chicago Bears and served as a player, coach, and executive.",
     "George Halas was nicknamed 'Papa Bear'.",
 
-    "The Chicago Bears previously played at Wrigley Field.",
-    "The team's name reflects strength, inspired by Chicago baseball culture and larger player size compared to baseball athletes."
+    "The Chicago Bears previously played at Wrigley Field."
 ]
 
 # -----------------------------
@@ -187,6 +200,8 @@ def bot_message(user_input):
     response = generate_answer(prompt, max_new_tokens= 200)
 
     #Edited to capitalize responses and add punctuation
+    if response[-1] not in ".!?":
+        response += "."
     return response[:1].upper() + response[1:]
 
 #Send chatbot's response to the frontend in json format

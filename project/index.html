@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,26 +12,30 @@
         <source src="nfl_theme.mp3" type="audio/mpeg">
     </audio>
 </head>
+
 <body>
 
     <header>
         <div class="header-title">Chicago Bears Informational Chatbot <br></div>
         <img src="logo.png" class="logo">
-        <i><p class="disclaimer header-subtitle">Accurate up to the end of the 2025 season.</p></i>
+        <i>
+            <p class="disclaimer header-subtitle">Accurate up to the end of the 2025 season.</p>
+        </i>
     </header>
 
     <div class="chat-container" id="chat-container">
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="bear.png" height="24px" width="24px" style="flex-shrink: 0;">
-        <div class="message bot-message">
-            I'm a Chicago football fan! Ask me anything about the Bears.
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="bear.png" height="24px" width="24px" style="flex-shrink: 0;">
+            <div class="message bot-message">
+                I'm a Chicago football fan! Ask me anything about the Bears.
+            </div>
         </div>
     </div>
-</div>
 
     <div class="input-area">
         <div class="input-wrapper">
-            <input type="text" id="user-input" placeholder="Ask me anything about the Chicago Bears ...." autocomplete="off" >
+            <input type="text" id="user-input" placeholder="Ask me anything about the Chicago Bears ...."
+                autocomplete="off">
             <button class="submit-btn" id="submit-btn">Send</button>
             <button class="surprise-btn" id="surprise-btn">Fun Fact</button>
         </div>
@@ -50,7 +55,7 @@
 
             const message = document.createElement("div");
             // Uses the CSS classes from the first HTML version
-            message.className = "message user-message"; 
+            message.className = "message user-message";
             message.innerText = text;
 
             const human_avatar = document.createElement("img");
@@ -80,7 +85,7 @@
 
             const message = document.createElement("div");
             // Uses the CSS classes from the first HTML version
-            message.className = "message bot-message"; 
+            message.className = "message bot-message";
             message.innerText = text;
 
             outer_div.appendChild(bear_avatar);
@@ -112,10 +117,10 @@
 
         // Get the chatbot's backend response to a given string
         async function send_to_backend(message) {
-            const get_response = await fetch("http://localhost:5000/bears_chatbot", { 
-                method: "POST", 
-                headers: { "Content-Type": "application/json" }, 
-                body: JSON.stringify({ message: message }) 
+            const get_response = await fetch("http://localhost:5000/bears_chatbot", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
             });
             return await get_response.json();
         }
@@ -129,19 +134,19 @@
 
             const input_val = user_input.value;
             user_input.value = "";
-            
+
             // Creates a human message element using text box input
             human_message(input_val);
-            
+
             // Creates a temporary loading bubble, deleted when chatbot response retrieved
             const loading = text_bubble();
             const scroll = document.getElementById("chat-container");
-    
+
             try {
                 const response = await send_to_backend(input_val);
                 const messageDiv = loading.querySelector(".bot-message"); // loading bubble
-                
-                messageDiv.innerHTML = ""; 
+
+                messageDiv.innerHTML = "";
                 messageDiv.innerText = response.response; // replaces the dots with text when response is retrieved
                 scroll.scrollTop = scroll.scrollHeight;
 
@@ -185,7 +190,7 @@
 
         // Animation logic for header collapse
         const header = document.querySelector("header");
-        const chatWindow = document.getElementById("chat-container"); 
+        const chatWindow = document.getElementById("chat-container");
         let isCollapsed = false; // to prevent glitches with scrollbar
 
         const headerShrinkSize = 75; // The approximate number of pixels the header loses when it shrinks
@@ -194,14 +199,14 @@
             const maxScroll = chatWindow.scrollHeight - chatWindow.clientHeight; // Calculate max distance the user can scroll
 
             if (maxScroll < headerShrinkSize + 20) {
-                return; 
+                return;
             }
 
             // Collapse only if user scrolls past the height of header
             if (!isCollapsed && chatWindow.scrollTop > headerShrinkSize) {
                 header.classList.add("collapsed");
                 isCollapsed = true;
-            } 
+            }
             // expand if user scrolls all the way back to the top
             else if (isCollapsed && chatWindow.scrollTop < 10) {
                 header.classList.remove("collapsed");
@@ -211,11 +216,15 @@
 
         // Surprise Me button functionality
         const bearsFacts = [
-            "The Chicago Bears were originally founded in Decatur, Illinois, in 1920 as the Decatur Staleys.",
+            "The Chicago Bears were originally founded in Decatur, Illinois, in 1919 as the Decatur Staleys.",
             "The Bears have won nine NFL Championships. Bear down.",
             "This franchise has more members in the Football Hall of Fame than any other team in the NFL.",
             "George Halas, the team's founder, was known as 'Papa Bear'.",
-            "The Bears' rivalry with the Green Bay Packers is the oldest in NFL history, going all the way back to 1921. FTP."
+            "The Bears' rivalry with the Green Bay Packers is the oldest in NFL history, going all the way back to 1921. FTP.",
+            "In the 2025 regular season the Chicago Bears won six games after trailing in the final two minutes, the most in NFL history.",
+            "In 2025 the Bears overcame a double-digit deficit in the final two minutes of a game against the Green Bay Packers twice.",
+            "The Chicago Bears are the second oldest team in the NFL. The oldest team (now the Arizona Cardinals) was also founded in the Chicago area.",
+            "The name Chicago Bears is a nod to a famed Chicago baseball team, the Chicago Cubs. Since football players tend to be larger than baseball players, George Halas used the word ‘bears’ to reflect the size difference.",
         ];
 
         // Function to handle the surprise button click
@@ -228,4 +237,5 @@
         document.getElementById("surprise-btn").addEventListener("click", triggerSurprise);
     </script>
 </body>
+
 </html>
